@@ -2,6 +2,8 @@
 #include "kernel/stat.h"
 #include "user.h"
 
+
+// learn from the pkuflypig
 void
 new_proc(int pipes[2])
 {
