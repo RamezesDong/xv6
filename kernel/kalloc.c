@@ -80,10 +80,10 @@ void * kalloc(void)
     return (void*)r;
 }
 
-uint64 getFreeMemory(void)
+uint64 free_memory(void)
 {
     int num=0;
     struct run *r;
     for(r=kmem.freelist;r;r=r->next,num++);
-    return (num << 32);
+    return (num << 12);
 }

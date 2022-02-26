@@ -117,7 +117,7 @@ sys_sysinfo(void)
     }
     struct proc *p = myproc();
     struct sysinfo info;
-    info.freemem = getFreeMemory();
+    info.freemem = free_memory();
     info.nproc = nums_proc();
     if (copyout(p->pagetable, addr, (char *)&info, sizeof(info)) < 0) {
         return -1;
