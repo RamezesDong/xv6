@@ -55,6 +55,7 @@ sys_sbrk(void)
 uint64
 sys_sleep(void)
 {
+  backtrace();
   int n;
   uint ticks0;
 
@@ -94,4 +95,32 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+// lab trap syscall
+uint64
+sys_sigalarm(void)
+{
+  struct proc* pro = myproc();
+  int ticks = 0;
+  if (argint(0, &ticks) != 0) {
+    panic("ticks fault");
+  }
+  pro->ticks = ticks;
+  uint64 fun;
+  argaddr(1, &fun);
+  pro->handler = (void(*)())fun;
+  return 0;
+}
+
+uint64
+sys_sigreturn(void)
+{
+  struct proc* p = myproc();
+  if (p->save_trap != 0) {
+    memmove(p->trapframe, p->save_trap, 512);
+    kfree(p->save_trap);
+    p->save_trap = 0;
+  }
+  return 0;
 }
